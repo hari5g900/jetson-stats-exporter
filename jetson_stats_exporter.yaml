@@ -25,7 +25,7 @@ spec:
         gpu: "true"
       containers:
       - command: ["python", "__main__.py"] 
-      - args:
+        args:
         - --port=9400
         image: ghcr.io/hari5g900/jetson_stats_exporter:latest
         imagePullPolicy: IfNotPresent
