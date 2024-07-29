@@ -7,6 +7,8 @@ metadata:
   name: jetson-stats-exporter
   namespace: monitoring
 spec:
+  nodeSelector:
+    gpu: "true"
   selector:
     matchLabels:
       gpu: "true"
