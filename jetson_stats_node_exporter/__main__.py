@@ -5,11 +5,11 @@ from prometheus_client import start_http_server
 from prometheus_client.core import REGISTRY
 import schedule
 
-from .exporter import JetsonExporter
-from .logger import factory
+from exporter import JetsonExporter
+from logger import factory
 
 
-def start_exporter(port=9100, update_period=1, logfile_cleanup_interval_hours=24):
+def start_exporter(port=9400, update_period=1, logfile_cleanup_interval_hours=24):
     logger = factory(__name__)
     logger.info(f"Node exporter running on port {port}. Querying speed: {update_period}s. "
                 f"Cleanup frequency: {logfile_cleanup_interval_hours}")
@@ -25,7 +25,7 @@ def start_exporter(port=9100, update_period=1, logfile_cleanup_interval_hours=24
 
 def cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, nargs='?', default=9100, help='Node exporter port')
+    parser.add_argument('--port', type=int, nargs='?', default=9400, help='Node exporter port')
     parser.add_argument('--update_period', type=int, nargs='?', default=1, help='Querying speed.')
     parser.add_argument('--logfile_cleanup_interval_hours', type=int, nargs='?', default=24,
                         help='Local log cleanup frequency.')

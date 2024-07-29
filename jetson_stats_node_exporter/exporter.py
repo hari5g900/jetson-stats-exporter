@@ -1,6 +1,6 @@
 from prometheus_client.core import GaugeMetricFamily
-from .logger import factory
-from .jtop_stats import JtopObservable
+from logger import factory
+from jtop_stats import JtopObservable
 
 
 class Jetson(object):
