@@ -2,19 +2,21 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
+    gpu: "true"
     app: jetson-stats-exporter
   name: jetson-stats-exporter
   namespace: monitoring
 spec:
   selector:
     matchLabels:
-      gpu: true
+      gpu: "true"
       app: jetson-stats-exporter
   template:
     metadata:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       labels:
+        gpu: "true"
         app: jetson-stats-exporter
     spec:
       containers:
@@ -71,6 +73,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
+    gpu: "true"
     app: jetson-stats-exporter
   name: jetson-stats-exporter
   namespace: monitoring
@@ -89,6 +92,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
+    gpu: "true"
     app: jetson-stats-exporter
     serviceMonitorSelector: prometheus
   name: jetson-stats-exporter
@@ -105,4 +109,5 @@ spec:
     - prometheus
   selector:
     matchLabels:
+      gpu: "true"
       app: jetson-stats-exporter
