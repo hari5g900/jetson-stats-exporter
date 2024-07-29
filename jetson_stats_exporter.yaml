@@ -19,6 +19,8 @@ spec:
         gpu: "true"
         app: jetson-stats-exporter
     spec:
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
       nodeSelector:
         gpu: "true"
       containers:

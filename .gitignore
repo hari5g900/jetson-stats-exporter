@@ -4,3 +4,4 @@ build/
 
 *.egg-info
 *.json
+.dockerconfigjson.yaml
