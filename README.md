@@ -1,4 +1,4 @@
-# Nvidia Jetson Prometheus Node Exporter (incl. GPU)
+# Nvidia Jetson Prometheus Node Exporter
 
 This project contains a node exporter variation building on jetson-stats (jtop) rather than tegrastats directly. This repo was created specifically for docker and kubernetes deployments. For a more general exporter take a look at the original repo [here](https://github.com/laminair/jetson_stats_node_exporter).
 
