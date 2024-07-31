@@ -1,7 +1,8 @@
-# Nvidia Jetson Prometheus Node Exporter (incl. GPU) - now including AGX Orin platform with JetPack 6.0
+# Nvidia Jetson Prometheus Node Exporter (incl. GPU)
 
-This project contains a node exporter variation building on jetson-stats (jtop) rather than tegrastats directly.
-We export the following metrics: 
+This project contains a node exporter variation building on jetson-stats (jtop) rather than tegrastats directly. This repo was created specifically for docker and kubernetes deployments. For a more general exporter take a look at the original repo [here](https://github.com/laminair/jetson_stats_node_exporter).
+
+The following metrics are exported: 
 - CPU
 - Memory 
 - GPU 
@@ -10,87 +11,51 @@ We export the following metrics:
 - Component Temperature
 - Disk Utilization
 - System Uptime
-
-We do not export: 
 - Power consumption
 
 ## Installation
-You can either clone this repo or use pip for installation. 
-Wheels or binaries are provided here: [Jetson Stats Node Exporter Releases](https://github.com/laminair/jetson_stats_node_exporter/releases)
 
-### Easy Installation via PyPi
+### Kubernetes
+  These instructions assume that you have a kubernetes cluster with/without prometheus deployed.
 
+  The container is published in ghcr.io. Run the following commands for setting up, Ignore the relevant commands if you have prometheus services already deployed:
 ```
-pip install jetson-stats-node-exporter==0.0.6
+kubectl create namespace monitoring
+kubectl create -f https://raw.githubusercontent.com/hari5g900/jetson-node-exporter/master/bundle.yaml -n monitoring
+kubectl apply -f https://raw.githubusercontent.com/hari5g900/jetson-node-exporter/master/prometheus.yaml -n monitoring
 ```
-
-### Install from git
-
-Installation with pip (no venv or conda due to jetson-stats dependency!): 
+Deploy the node-exporter with this command:
 ```
-> export JSN_RELEASE="0.0.6"
-> sudo -H pip3 install -U https://github.com/laminair/jetson_stats_node_exporter/releases/download/$JSN_RELEASE/jetson_stats_node_exporter-$JSN_RELEASE-py3-none-any.whl
+kubectl apply -f https://raw.githubusercontent.com/hari5g900/jetson-node-exporter/master/jetson_stats_exporter.yaml -n monitoring
 ```
 
-### Install from source
-Manual installation (may require sudo privileges due to jetson-stats dependency): 
-```
-> git clone https://github.com/laminair/jetson_stats_node_exporter.git
-> cd jetson_stats_node_exporter
-> python3 setup.py install
-```
+Alternatively clone the repo and replace the links with the filepath. You can also build the container yourself (instructions below) and replace the container image name in jetson-stats-exporter.yaml.
 
-## Running the exporter
-After installation the project is available as python module. Run it as follows:
-```
-python3 -m jetson_stats_node_exporter
-```
+### Docker
 
-This will spawn a prometheus node exporter service on port 9100 and you'll be able to scrape all statistics.
-Note: The command above can also be run as a systemd service in the background.
-
-### Creating a background service
-The node exporter can be wrapped in a systemd service.
-Place the following file in path `/etc/systemd/system/jetson-stats-node-exporter.service`
+To run the exporter using docker, clone the repo, build the container and run it as shown:
 
 ```
-[Unit]
-Description=Jetson Stats GPU Node Exporter
-After=multi-user.target
-Requires=jtop.service
-
-[Service]
-Type=simple
-Restart=on-failure
-RestartSec=10
-User=root
-Group=root
-ExecStart=/usr/bin/python3 -m jetson_stats_node_exporter
-
-[Install]
-WantedBy=multi-user.target
+docker build . -t <name of your container>:<version (or "latest")>
+docker run -d --rm -it -v /run/jtop.sock:/run/jtop.sock -p 9400:9400 <name of your container>:<version (or "latest")>
 ```
 
-Then run `sudo systemctl start jetson-stats-node-exporter`. 
-To check if the service is alive `sudo systemctl status jetson-stats-node-exporter`
-
-### Creating a docker image
-The node exporter can be wrapped in a docker image and can be run via docker.
 If you use docker compose you can build the image directly via docker compose.
 Place the Dockerfile in the same directory as your docker-compose.yaml, 
 or use the context option in your docker-compose.yaml to specify the folder containing the Dockerfile.
 ```
-  jetson_stats_node_exporter:
+  jetson_stats_exporter:
     build:
       context: ./custom_images
-      dockerfile: Dockerfile_jetson_stats_exporter
-    container_name: hsos_jetson_stats_node_exporter
+      dockerfile: Dockerfile
+    container_name: jetson_stats_exporter
     restart: always
     ports:
-      - "9100:9100"  # Map internal port 9100 to a different external port 9100
+      - "9400:9400"  # Map internal port 9400 to a different external port 9400
     volumes:
       - /run/jtop.sock:/run/jtop.sock
 ```
 
 ## Credits
-This project is based on https://github.com/lipovsek/jetson_prometheus_exporter, which uses tegrastats.
+This project is based on https://github.com/lipovsek/jetson_prometheus_exporter, which uses tegrastats. The original reference for the exporter was https://github.com/laminair/jetson_stats_node_exporter
+
