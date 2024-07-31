@@ -49,10 +49,9 @@ spec:
         # - mountPath: /host/sys
         #   name: sys
         #   readOnly: true
-        - mountPath: /host/run
-          name: run
+        - mountPath: /host/run/jtop.sock
+          name: run/jtop.sock
           readOnly: false
-      hostNetwork: true
       hostPID: true
       restartPolicy: Always
       tolerations:
