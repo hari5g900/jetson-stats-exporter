@@ -49,7 +49,7 @@ spec:
         # - mountPath: /host/sys
         #   name: sys
         #   readOnly: true
-        - mountPath: /host/run/jtop.sock
+        - mountPath: /run/jtop.sock
           name: run
           readOnly: false
       hostPID: true
@@ -69,8 +69,8 @@ spec:
       #     type: ""
       #   name: sys
       - hostPath:
-          path: /run
-          type: ""
+          path: /run/jtop.sock
+          type: Socket
         name: run
 ---
 apiVersion: v1

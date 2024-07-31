@@ -4,7 +4,7 @@
 # Usage: See git hub documentation
 
 # Base image, Python image
-FROM python:3.11-slim
+FROM rbonghi/jetson_stats:latest
 
 # Set environment variables (prevents writing .pyc files and buffering of stdout and stderr)
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -14,11 +14,12 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y gcc python3-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/requirements.txt
-RUN pip install -r ./app/requirements.txt
+RUN pip install -r /app/requirements.txt
 COPY jetson_stats_node_exporter /app
 WORKDIR /app/
 ENV PYTHONPATH=/app
 
+VOLUME ["/run/jtop.sock"]
 EXPOSE 9400
 # Install the Jetson Stats Node Exporter
 # --> Insert the version you want to install and which fits your system requirements
