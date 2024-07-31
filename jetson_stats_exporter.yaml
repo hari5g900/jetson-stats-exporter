@@ -50,7 +50,7 @@ spec:
         #   name: sys
         #   readOnly: true
         - mountPath: /host/run/jtop.sock
-          name: run/jtop.sock
+          name: run
           readOnly: false
       hostPID: true
       restartPolicy: Always
@@ -71,7 +71,7 @@ spec:
       - hostPath:
           path: /run
           type: ""
-        name: run/jtop.sock
+        name: run
 ---
 apiVersion: v1
 kind: Service
