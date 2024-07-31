@@ -71,7 +71,7 @@ spec:
       - hostPath:
           path: /run
           type: ""
-        name: run
+        name: run/jtop.sock
 ---
 apiVersion: v1
 kind: Service
