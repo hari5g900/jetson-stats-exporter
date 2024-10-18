@@ -4,7 +4,7 @@
 # Usage: See git hub documentation
 
 # Base image, Python image
-FROM rbonghi/jetson_stats:latest
+FROM rbonghi/jetson_stats:4.2.9
 
 # Set environment variables (prevents writing .pyc files and buffering of stdout and stderr)
 ENV PYTHONDONTWRITEBYTECODE 1

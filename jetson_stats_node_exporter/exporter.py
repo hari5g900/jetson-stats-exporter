@@ -193,7 +193,7 @@ class JetsonExporter(object):
         yield self.__ram()
         yield self.__gpuram()
         yield self.__swap()
-        yield self.__emc()
+        # yield self.__emc()
         yield self.__temperature()
         yield self.__integrated_power_machine_parts()
         yield self.__integrated_power_total()
